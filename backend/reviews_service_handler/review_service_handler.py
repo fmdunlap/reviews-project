@@ -86,9 +86,20 @@ class ReviewServiceHandler(SimpleHTTPRequestHandler):
     def _send_json_response(self, status_code: int, body: dict):
         """Send a JSON response."""
         self.send_response(status_code)
-        self.send_header("Content-type", "application/json")
         self.end_headers()
         self.wfile.write(json.dumps(body, default=str).encode('utf-8'))
+
+    def end_headers(self):
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Methods', '*')
+        self.send_header('Access-Control-Allow-Headers', '*')
+        self.send_header(
+            'Cache-Control', 'no-store, no-cache, must-revalidate')
+        return super(ReviewServiceHandler, self).end_headers()
+
+    def do_OPTIONS(self):
+        self.send_response(200)
+        self.end_headers()
 
     def do_GET(self):
         """Handle GET requests."""
