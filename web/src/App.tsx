@@ -1,12 +1,14 @@
 import React, { useEffect } from "react";
 import ReviewList from "./components/ReviewList";
+import AppButtons from "./components/AppButtons";
 
 function App() {
+  const [selectedAppId, setSelectedAppId] = React.useState("447188370");
   const [reviews, setReviews] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:8000/reviews?app_id=447188370", {
+    fetch(`http://localhost:8000/reviews?app_id=${selectedAppId}`, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -16,7 +18,7 @@ function App() {
         setReviews(data);
         setLoading(false);
       });
-  }, []);
+  }, [selectedAppId]);
 
   return (
     <div className="relative min-w-full bg-slate-500 py-4 min-h-screen">
@@ -25,7 +27,19 @@ function App() {
           <div className="text-center text-2xl font-bold mb-4 text-white ">
             Reviews
           </div>
-          <ReviewList reviews={reviews} />
+          <div className="mx-auto px-4 md:px-0 md:w-2/3">
+            <div className="flex flex-row py-4 gap-x-4">
+              <p className="text-white my-auto text-lg">
+                Select an app to view reviews from:{" "}
+              </p>
+              <AppButtons
+                onAppSelected={(appId) => {
+                  setSelectedAppId(appId);
+                }}
+              />
+            </div>
+            <ReviewList reviews={reviews} />
+          </div>
         </>
       )}
       {loading && (

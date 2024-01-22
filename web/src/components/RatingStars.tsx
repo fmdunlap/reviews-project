@@ -20,11 +20,7 @@ export default function RatingStars({ rating }: RatingStarsProps) {
       {Array(Math.floor(rating))
         .fill(0)
         .map((_, i) => {
-          return (
-            <>
-              <RatingStarSvg key={i} />
-            </>
-          );
+          return <RatingStarSvg key={i} />;
         })}
     </div>
   );
