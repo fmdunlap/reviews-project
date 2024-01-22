@@ -1,19 +1,29 @@
-from http.server import HTTPServer;
-from review_service_handler import ReviewServiceHandler;
+"""Main entry point for the Review Service."""
+
 import multiprocessing
+from http.server import HTTPServer
+from reviews_service_handler.review_service_handler import ReviewServiceHandler
+from rss_polling_service.rss_polling_service import RssPollingService
+import config
 
-HTTP_PORT = 8000
 
-def start_http_server():
-    print(f"🚀 Starting server on port {HTTP_PORT}")
-    server = HTTPServer(("localhost", HTTP_PORT), ReviewServiceHandler)
+def _start_http_server():
+    print(f"🚀 Starting server on port {config.HTTP_PORT}")
+    server = HTTPServer(("localhost", config.HTTP_PORT), ReviewServiceHandler)
     server.serve_forever()
 
-def start_rss_polling_server():
-    print(f"📡 Starting RSS polling server")
-    pass
+
+def _start_rss_polling_server():
+    print("📡 Starting RSS polling server")
+    server = RssPollingService(
+        config.SUPPORTED_APP_IDS,
+        config.POLLING_INTERVAL,
+        config.REVIEW_LOOKBACK_TIMEDELTA
+    )
+    server.start()
+
 
 if __name__ == "__main__":
-    print(f"🔥🔥 Starting Review Service 🔥🔥")
-    multiprocessing.Process(target=start_http_server).start()
-    multiprocessing.Process(target=start_rss_polling_server).start()
+    print("🔥🔥 Starting Review Service 🔥🔥")
+    multiprocessing.Process(target=_start_http_server).start()
+    multiprocessing.Process(target=_start_rss_polling_server).start()
