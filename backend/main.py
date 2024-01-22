@@ -14,6 +14,6 @@ def start_rss_polling_server():
     pass
 
 if __name__ == "__main__":
-    printf(f"🔥🔥 Starting Review Service 🔥🔥")
+    print(f"🔥🔥 Starting Review Service 🔥🔥")
     multiprocessing.Process(target=start_http_server).start()
     multiprocessing.Process(target=start_rss_polling_server).start()
