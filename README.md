@@ -8,6 +8,8 @@ First things first, let's get everything loaded up on your end.
 
 To get the backend started, you just need to run the python script from the root directory of the project. It's a pretty simple script, so it doesn't need any special dependencies. It will run on port 8000 by default.
 
+Note: I'm using Python 3.12.1, so check if you've got a different version on your PATH
+
 ```bash
 cd ./backend
 python3 main.py
