@@ -105,6 +105,7 @@ class ReviewServiceHandler(SimpleHTTPRequestHandler):
         """Handle GET requests."""
         path = self.path
 
+        # ;)
         if path == "/favicon.ico":
             with open('./winking-face-emoji-ico.png', 'rb') as f:
                 self.send_response(200)
@@ -112,18 +113,18 @@ class ReviewServiceHandler(SimpleHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write(f.read())
 
-        # This is a little hacky; but it's technically accurate for this service
-        if not path.startswith("/reviews"):
-            self.send_error(404, "Not Found.")
+        if path.startswith("/reviews"):
+            self.handle_reviews_get(path)
             return
 
-        self.handle_reviews_get(path)
+        self.send_error(404, "Not Found.")
 
     def handle_reviews_get(self, path):
         """Handle GET requests to /reviews."""
         params, success = self._parse_params(path)
 
         if not success:
+            # We've already sent the error response.
             return
 
         app_id = params['app_id']

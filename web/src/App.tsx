@@ -2,13 +2,15 @@ import React, { useEffect } from "react";
 import ReviewList from "./components/ReviewList";
 import AppButtons from "./components/AppButtons";
 
+const REVIEW_SERVICE_BASE_URL = "http://localhost:8000";
+
 function App() {
   const [selectedAppId, setSelectedAppId] = React.useState("447188370");
   const [reviews, setReviews] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
 
   useEffect(() => {
-    fetch(`http://localhost:8000/reviews?app_id=${selectedAppId}`, {
+    fetch(`${REVIEW_SERVICE_BASE_URL}/reviews?app_id=${selectedAppId}`, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -30,7 +32,7 @@ function App() {
           <div className="mx-auto px-4 md:px-0 md:w-2/3">
             <div className="flex flex-row py-4 gap-x-4">
               <p className="text-white my-auto text-lg">
-                Select an app to view reviews from:{" "}
+                Select an app to view reviews from:
               </p>
               <AppButtons
                 onAppSelected={(appId) => {
