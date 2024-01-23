@@ -112,6 +112,7 @@ class ReviewServiceHandler(SimpleHTTPRequestHandler):
                 self.send_header("Content-type", "image/png")
                 self.end_headers()
                 self.wfile.write(f.read())
+            return
 
         if path.startswith("/reviews"):
             self.handle_reviews_get(path)

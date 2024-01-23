@@ -23,17 +23,17 @@ class RssPollingService():
             polling_interval: timedelta = DEFAULT_POLLING_INTERVAL,
             review_lookback_timedelta: timedelta = DEFAULT_REVIEW_LOOKBACK_TIMEDELTA
     ):
-        """Initialize the RSS polling service. Note, must call startPolling to start polling."""
+        """Initialize the RSS polling service. Note, must call start to start polling."""
         self.app_id_list = app_id_list
         self.polling_interval = polling_interval
         self.review_lookback_timedelta = review_lookback_timedelta
-        self.reviews = {appId: [] for appId in app_id_list}
         self.db = ReviewsDB()
 
     def start(self):
         """Start polling the RSS feed for reviews.
 
-        This will poll the RSS feed for reviews for each app in the appIdList"""
+        This will poll the RSS feed for reviews for each app in the app_id_list
+        """
         while True:
             for app_id in self.app_id_list:
                 self.poll_app(app_id)

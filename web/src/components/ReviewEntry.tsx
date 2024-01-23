@@ -17,6 +17,7 @@ export default function ReviewEntry({ review }: ReviewEntryProps) {
     <div className="flex flex-col bg-white rounded-lg shadow-lg p-6 mb-4">
       <div className="flex flex-row items-center mb-4">
         <div className="flex flex-col">
+          <div className="text-lg font-bold">{review.title}</div>
           <div className="text-sm font-bold">{review.authorName}</div>
           <div className="text-sm text-gray-500">{formattedDate}</div>
         </div>
