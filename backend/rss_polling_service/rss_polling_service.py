@@ -100,7 +100,12 @@ class RssPollingService():
             page: The page of reviews to fetch. Defaults to 1.
         """
         req = urllib.request.Request(
-            APPLE_RSS_URL.format(appId=app_id, page=page))
+            APPLE_RSS_URL.format(appId=app_id, page=page),
+            data=None,
+            # Spoof the user agent to get the full RSS feed.
+            headers={
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'
+            })
 
         reviews_json = ''
         with urllib.request.urlopen(req) as response:
@@ -113,21 +118,24 @@ class RssPollingService():
         Args:
             json_string: The JSON string to parse into reviews.
         """
-        raw_reviews = json.loads(json_string)['feed']['entry']
         reviews = []
-        for raw_review in raw_reviews:
-            review = Review(
-                id=raw_review['id']['label'],
-                authorName=raw_review['author']['name']['label'],
-                authorUri=raw_review['author']['uri']['label'],
-                rating=int(raw_review['im:rating']['label']),
-                title=raw_review['title']['label'],
-                content=raw_review['content']['label'],
-                updated=datetime.strptime(
-                    raw_review['updated']['label'], APPLE_DATETIME_FORMAT).astimezone(timezone.utc),
-                version=raw_review['im:version']['label']
-            )
-            reviews.append(review)
+        try:
+            raw_reviews = json.loads(json_string)['feed']['entry']
+            for raw_review in raw_reviews:
+                review = Review(
+                    id=raw_review['id']['label'],
+                    authorName=raw_review['author']['name']['label'],
+                    authorUri=raw_review['author']['uri']['label'],
+                    rating=int(raw_review['im:rating']['label']),
+                    title=raw_review['title']['label'],
+                    content=raw_review['content']['label'],
+                    updated=datetime.strptime(
+                        raw_review['updated']['label'], APPLE_DATETIME_FORMAT).astimezone(timezone.utc),
+                    version=raw_review['im:version']['label']
+                )
+                reviews.append(review)
+        except KeyError:
+            print(f"Error parsing RSS response {json_string}")
         return reviews
 
 
