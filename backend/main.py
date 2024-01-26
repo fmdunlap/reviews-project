@@ -25,5 +25,15 @@ def _start_rss_polling_server():
 
 if __name__ == "__main__":
     print("🔥🔥 Starting Review Service 🔥🔥")
-    multiprocessing.Process(target=_start_http_server).start()
-    multiprocessing.Process(target=_start_rss_polling_server).start()
+    http_server_process = multiprocessing.Process(target=_start_http_server)
+    rss_polling_process = multiprocessing.Process(
+        target=_start_rss_polling_server)
+    try:
+        http_server_process.start()
+        rss_polling_process.start()
+        http_server_process.join()
+        rss_polling_process.join()
+    except KeyboardInterrupt:
+        print("🛑 Stopping Review Service 🛑")
+        http_server_process.terminate()
+        rss_polling_process.terminate()
