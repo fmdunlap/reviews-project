@@ -3,7 +3,7 @@ handling requests to the review service."""
 
 import json
 from http.server import SimpleHTTPRequestHandler
-from typing import TypedDict
+from typing import TypedDict, Tuple
 from datetime import datetime, timedelta
 from urllib.parse import urlparse, parse_qs
 from regex import compile as re_compile
@@ -75,7 +75,7 @@ class ReviewServiceHandler(SimpleHTTPRequestHandler):
 
         return search_params['app_id'][0]
 
-    def _parse_params(self, path: str) -> (ReviewsParams | None, bool):
+    def _parse_params(self, path: str) -> Tuple[ReviewsParams | None, bool]:
         app_id = self._parse_app_id(path)
 
         if app_id is None:
